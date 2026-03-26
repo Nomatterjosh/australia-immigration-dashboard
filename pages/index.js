@@ -9,13 +9,14 @@ const modules = [
   { path: '/occupation', icon: '💼', name: '职业评估', color: 'blue', desc: 'ANZSCO查询' },
   { path: '/states', icon: '📊', name: '州担保', color: 'emerald', desc: '实时追踪' },
   { path: '/calculator', icon: '💰', name: '费用计算', color: 'yellow', desc: '全流程费用' },
+  { path: '/news', icon: '📰', name: '移民资讯', color: 'orange', desc: '每日简报' },
   { path: '/community', icon: '👥', name: '社区问答', color: 'pink', desc: '经验分享' },
   { path: '/living', icon: '🏠', name: '生活助手', color: 'teal', desc: '落地清单' },
 ];
 
 const stats = {
-  total: 8,
-  completed: 8,
+  total: 9,
+  completed: 9,
   inProgress: 0,
   avgProgress: 100
 };
@@ -28,6 +29,7 @@ const getColorClass = (color) => {
     blue: 'from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700',
     emerald: 'from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700',
     yellow: 'from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700',
+    orange: 'from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700',
     pink: 'from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700',
     teal: 'from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700',
   };
@@ -42,6 +44,7 @@ const getAccentColor = (color) => {
     blue: 'text-blue-400',
     emerald: 'text-emerald-400',
     yellow: 'text-yellow-400',
+    orange: 'text-orange-400',
     pink: 'text-pink-400',
     teal: 'text-teal-400',
   };
