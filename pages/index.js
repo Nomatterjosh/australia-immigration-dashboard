@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useI18n } from '../lib/i18n-context';
+// i18n placeholder
 
 const moduleList = [
   { path: '/advisor', icon: '🤖', key: 'advisor', color: 'pink', new: true },
