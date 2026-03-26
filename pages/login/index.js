@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useI18n } from '../../lib/i18n-context';
+// i18n simplified
 
 export default function Login() {
   const router = useRouter();
