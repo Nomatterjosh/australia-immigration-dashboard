@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 
 const modules = [
+  { path: '/advisor', icon: '🤖', name: 'AI顾问', color: 'pink', desc: '智能推荐签证', new: true },
   { path: '/assessment', icon: '🎯', name: '签证评估', color: 'cyan', desc: 'EOI打分计算' },
   { path: '/planner', icon: '🗺️', name: '路径规划', color: 'green', desc: '智能推荐路径' },
   { path: '/documents', icon: '📝', name: '文书助手', color: 'purple', desc: 'SOP/推荐信生成' },
@@ -10,14 +11,16 @@ const modules = [
   { path: '/states', icon: '📊', name: '州担保', color: 'emerald', desc: '实时追踪' },
   { path: '/calculator', icon: '💰', name: '费用计算', color: 'yellow', desc: '全流程费用' },
   { path: '/news', icon: '📰', name: '移民资讯', color: 'orange', desc: '每日简报' },
+  { path: '/faq', icon: '❓', name: 'FAQ', color: 'rose', desc: '常见问题', new: true },
   { path: '/laws', icon: '⚖️', name: '移民法导航', color: 'indigo', desc: 'Act & Regs' },
-  { path: '/community', icon: '👥', name: '社区问答', color: 'pink', desc: '经验分享' },
+  { path: '/law-updates', icon: '📜', name: '法律更新', color: 'violet', desc: '修正案监测', new: true },
+  { path: '/community', icon: '👥', name: '社区问答', color: 'fuchsia', desc: '经验分享' },
   { path: '/living', icon: '🏠', name: '生活助手', color: 'teal', desc: '落地清单' },
 ];
 
 const stats = {
-  total: 10,
-  completed: 10,
+  total: modules.length,
+  completed: modules.length,
   inProgress: 0,
   avgProgress: 100
 };
@@ -34,51 +37,122 @@ const getColorClass = (color) => {
     indigo: 'from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700',
     pink: 'from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700',
     teal: 'from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700',
-  };
-  return colors[color] || colors.cyan;
-};
-
-const getAccentColor = (color) => {
-  const colors = {
-    cyan: 'text-cyan-400',
-    green: 'text-green-400',
-    purple: 'text-purple-400',
-    blue: 'text-blue-400',
-    emerald: 'text-emerald-400',
-    yellow: 'text-yellow-400',
-    orange: 'text-orange-400',
-    indigo: 'text-indigo-400',
-    pink: 'text-pink-400',
-    teal: 'text-teal-400',
+    rose: 'from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700',
+    violet: 'from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700',
+    fuchsia: 'from-fuchsia-500 to-fuchsia-600 hover:from-fuchsia-600 hover:to-fuchsia-700',
   };
   return colors[color] || colors.cyan;
 };
 
 export default function Dashboard() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearch, setShowSearch] = useState(false);
+
+  useEffect(() => {
+    if (searchQuery.length >= 2) {
+      const q = searchQuery.toLowerCase();
+      const results = modules.filter(m => 
+        m.name.toLowerCase().includes(q) || 
+        m.desc.toLowerCase().includes(q)
+      );
+      setSearchResults(results);
+      setShowSearch(true);
+    } else {
+      setSearchResults([]);
+      setShowSearch(false);
+    }
+  }, [searchQuery]);
+
   return (
     <>
       <Head>
         <title>澳洲移民项目 - 一体化平台</title>
         <meta name="description" content="澳洲移民一体化解决方案平台" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="theme-color" content="#0f172a" />
       </Head>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
         <div className="max-w-6xl mx-auto px-6 py-10">
           {/* Header */}
-          <div className="text-center mb-10">
+          <div className="text-center mb-8">
             <h1 className="text-5xl font-bold mb-3 bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">
               🇦🇺 澳洲移民项目
             </h1>
-            <p className="text-gray-400 text-lg mb-6">一体化移民解决方案平台</p>
+            <p className="text-gray-400 text-lg mb-4">一体化移民解决方案平台</p>
+            
+            {/* Search Bar */}
+            <div className="max-w-xl mx-auto relative mb-6">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="🔍 搜索功能..."
+                  className="w-full bg-gray-800/80 border border-gray-700 rounded-xl px-6 py-4 text-lg focus:border-cyan-500 outline-none transition"
+                />
+              </div>
+              {/* Search Results */}
+              {showSearch && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-gray-800 border border-gray-700 rounded-xl overflow-hidden shadow-2xl z-50">
+                  {searchResults.length > 0 ? (
+                    searchResults.map((r, i) => (
+                      <Link
+                        key={i}
+                        href={r.path}
+                        onClick={() => { setSearchQuery(''); setShowSearch(false); }}
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-gray-700 transition"
+                      >
+                        <span className="text-2xl">{r.icon}</span>
+                        <div>
+                          <p className="font-semibold">{r.name}</p>
+                          <p className="text-gray-400 text-sm">{r.desc}</p>
+                        </div>
+                      </Link>
+                    ))
+                  ) : (
+                    <div className="px-4 py-6 text-center text-gray-400">
+                      未找到相关功能
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
             <div className="flex justify-center gap-4">
-              <Link href="/admin" className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition">
+              <Link href="/admin" className="px-5 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition">
                 ⚙️ 管理后台
               </Link>
             </div>
           </div>
 
+          {/* Quick Start Guide */}
+          <div className="bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-500/30 rounded-xl p-6 mb-8">
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+              <span>🎯</span> 快速开始
+            </h2>
+            <div className="flex flex-wrap justify-center gap-4 text-sm">
+              <Link href="/advisor" className="bg-pink-500/20 hover:bg-pink-500/30 px-4 py-2 rounded-lg transition flex items-center gap-2">
+                <span>1.</span> AI智能评估
+              </Link>
+              <Link href="/assessment" className="bg-cyan-500/20 hover:bg-cyan-500/30 px-4 py-2 rounded-lg transition flex items-center gap-2">
+                <span>2.</span> 精确EOI打分
+              </Link>
+              <Link href="/occupation" className="bg-green-500/20 hover:bg-green-500/30 px-4 py-2 rounded-lg transition flex items-center gap-2">
+                <span>3.</span> 职业评估
+              </Link>
+              <Link href="/planner" className="bg-purple-500/20 hover:bg-purple-500/30 px-4 py-2 rounded-lg transition flex items-center gap-2">
+                <span>4.</span> 规划路径
+              </Link>
+            </div>
+          </div>
+
           {/* Stats Banner */}
-          <div className="bg-gradient-to-r from-cyan-500/10 to-green-500/10 border border-cyan-500/30 rounded-xl p-6 mb-10">
+          <div className="bg-gradient-to-r from-cyan-500/10 to-green-500/10 border border-cyan-500/30 rounded-xl p-6 mb-8">
             <div className="grid grid-cols-4 gap-6 text-center">
               <div>
                 <div className="text-4xl font-bold text-cyan-400">{stats.total}</div>
@@ -100,7 +174,7 @@ export default function Dashboard() {
           </div>
 
           {/* Main Navigation */}
-          <div className="mb-10">
+          <div className="mb-8">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
               <span>🚀</span> 功能导航
             </h2>
@@ -109,8 +183,11 @@ export default function Dashboard() {
                 <Link
                   key={mod.path}
                   href={mod.path}
-                  className={`bg-gradient-to-r ${getColorClass(mod.color)} rounded-xl p-5 transition transform hover:scale-105 hover:shadow-lg`}
+                  className={`bg-gradient-to-r ${getColorClass(mod.color)} rounded-xl p-5 transition transform hover:scale-105 hover:shadow-lg relative`}
                 >
+                  {mod.new && (
+                    <span className="absolute top-2 right-2 bg-white/20 text-xs px-2 py-0.5 rounded-full">NEW</span>
+                  )}
                   <div className="text-4xl mb-2">{mod.icon}</div>
                   <div className="font-bold text-lg mb-1">{mod.name}</div>
                   <div className="text-sm opacity-80">{mod.desc}</div>
@@ -120,23 +197,32 @@ export default function Dashboard() {
           </div>
 
           {/* Quick Actions */}
-          <div className="grid md:grid-cols-2 gap-6 mb-10">
-            <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-              <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+          <div className="grid md:grid-cols-3 gap-4 mb-8">
+            <div className="bg-white/5 border border-white/10 rounded-xl p-5">
+              <h3 className="font-bold mb-3 flex items-center gap-2">
                 <span>📋</span> 项目管理
               </h3>
-              <p className="text-gray-400 text-sm mb-4">查看项目进度详情，管理功能模块状态</p>
-              <Link href="/admin" className="inline-block px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg transition text-sm">
+              <p className="text-gray-400 text-sm mb-3">查看项目进度详情</p>
+              <Link href="/admin" className="text-cyan-400 hover:underline text-sm">
                 进入管理后台 →
               </Link>
             </div>
-            <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-              <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+            <div className="bg-white/5 border border-white/10 rounded-xl p-5">
+              <h3 className="font-bold mb-3 flex items-center gap-2">
+                <span>❓</span> 常见问题
+              </h3>
+              <p className="text-gray-400 text-sm mb-3">FAQ常见问题解答</p>
+              <Link href="/faq" className="text-rose-400 hover:underline text-sm">
+                查看FAQ →
+              </Link>
+            </div>
+            <div className="bg-white/5 border border-white/10 rounded-xl p-5">
+              <h3 className="font-bold mb-3 flex items-center gap-2">
                 <span>💵</span> 盈利模式
               </h3>
-              <p className="text-gray-400 text-sm mb-4">了解平台的商业模式和收入来源</p>
-              <Link href="/admin" className="inline-block px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition text-sm">
-                查看盈利模式 →
+              <p className="text-gray-400 text-sm mb-3">了解商业模式</p>
+              <Link href="/admin" className="text-green-400 hover:underline text-sm">
+                查看详情 →
               </Link>
             </div>
           </div>
@@ -146,33 +232,33 @@ export default function Dashboard() {
             <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
               <span>⭐</span> 核心功能亮点
             </h3>
-            <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
               <div className="flex items-start gap-3">
-                <span className="text-cyan-400">✓</span>
+                <span className="text-pink-400">🤖</span>
+                <div>
+                  <p className="font-semibold">AI智能顾问</p>
+                  <p className="text-gray-400">根据情况推荐签证</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="text-cyan-400">🎯</span>
                 <div>
                   <p className="font-semibold">智能 EOI 打分</p>
-                  <p className="text-gray-400">精准计算分数，对标邀请线</p>
+                  <p className="text-gray-400">精准计算分数</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-green-400">✓</span>
+                <span className="text-purple-400">📝</span>
                 <div>
                   <p className="font-semibold">AI 文书生成</p>
-                  <p className="text-gray-400">一键生成 SOP、推荐信等材料</p>
+                  <p className="text-gray-400">一键生成材料</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-purple-400">✓</span>
+                <span className="text-orange-400">📰</span>
                 <div>
-                  <p className="font-semibold">职业评估导航</p>
-                  <p className="text-gray-400">ANZSCO 代码查询全攻略</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="text-yellow-400">✓</span>
-                <div>
-                  <p className="font-semibold">费用透明化</p>
-                  <p className="text-gray-400">全流程费用一目了然</p>
+                  <p className="font-semibold">实时资讯</p>
+                  <p className="text-gray-400">政策动态追踪</p>
                 </div>
               </div>
             </div>
