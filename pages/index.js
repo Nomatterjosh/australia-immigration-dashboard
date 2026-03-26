@@ -124,6 +124,9 @@ export default function Dashboard() {
             </div>
 
             <div className="flex justify-center gap-4">
+              <Link href="/login" className="px-5 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg transition">
+                🔐 登录
+              </Link>
               <Link href="/admin" className="px-5 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition">
                 ⚙️ 管理后台
               </Link>
