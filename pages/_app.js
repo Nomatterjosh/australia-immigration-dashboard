@@ -1,10 +1,6 @@
 import '../styles/globals.css';
-import { I18nProvider } from '../lib/i18n-context';
+// 多语言通过组件内直接引用实现
 
 export default function App({ Component, pageProps }) {
-  return (
-    <I18nProvider>
-      <Component {...pageProps} />
-    </I18nProvider>
-  );
+  return <Component {...pageProps} />;
 }
